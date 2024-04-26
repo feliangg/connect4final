@@ -1,0 +1,18 @@
+{
+	"project": {
+		"name": "connect4fin",
+		"slot": 1,
+		"description": "",
+		"platform": "IQ2",
+		"creationDate": "Mon, 22 Apr 2024 21:17:38 GMT",
+		"language": "python",
+		"python": {
+			"main": "/src/main.py"
+		},
+		"sdkVersion": "IQ2_1_0_0_19"
+	},
+	"extension": {
+		"version": "0.5.0",
+		"json": 1
+	}
+}
