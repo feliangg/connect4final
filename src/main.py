@@ -53,37 +53,67 @@ brain.screen.print("Right = Medium")
 brain.screen.set_cursor(6,3)
 brain.screen.print("Check = Hard")
 
+def gameBoard():
+    brain.screen.draw_rectangle(0, 0, 15, 15)
+    brain.screen.draw_rectangle(15, 0, 15, 15)
+    brain.screen.draw_rectangle(30, 0, 15, 15)
+    brain.screen.draw_rectangle(45, 0, 15, 15)
+    brain.screen.draw_rectangle(60, 0, 15, 15)
+    brain.screen.draw_rectangle(75, 0, 15, 15)
+    brain.screen.draw_rectangle(90, 0, 15, 15)
+
+    brain.screen.draw_rectangle(0, 15, 15, 15)
+    brain.screen.draw_rectangle(0, 30, 15, 15)
+    brain.screen.draw_rectangle(0, 45, 15, 15)
+    brain.screen.draw_rectangle(0, 60, 15, 15)
+    brain.screen.draw_rectangle(0, 75, 15, 15)
+
+    brain.screen.draw_rectangle(15, 15, 15, 15)
+    brain.screen.draw_rectangle(15, 30, 15, 15)
+    brain.screen.draw_rectangle(15, 45, 15, 15)
+    brain.screen.draw_rectangle(15, 60, 15, 15)
+    brain.screen.draw_rectangle(15, 75, 15, 15)
+
+    brain.screen.draw_rectangle(30, 15, 15, 15)
+    brain.screen.draw_rectangle(30, 30, 15, 15)
+    brain.screen.draw_rectangle(30, 45, 15, 15)
+    brain.screen.draw_rectangle(30, 60, 15, 15)
+    brain.screen.draw_rectangle(30, 75, 15, 15)
+
+    brain.screen.draw_rectangle(45, 15, 15, 15)
+    brain.screen.draw_rectangle(45, 30, 15, 15)
+    brain.screen.draw_rectangle(45, 45, 15, 15)
+    brain.screen.draw_rectangle(45, 60, 15, 15)
+    brain.screen.draw_rectangle(45, 75, 15, 15)
+
+    brain.screen.draw_rectangle(60, 15, 15, 15)
+    brain.screen.draw_rectangle(60, 30, 15, 15)
+    brain.screen.draw_rectangle(60, 45, 15, 15)
+    brain.screen.draw_rectangle(60, 60, 15, 15)
+    brain.screen.draw_rectangle(60, 75, 15, 15)
+
+    brain.screen.draw_rectangle(75, 15, 15, 15)
+    brain.screen.draw_rectangle(75, 30, 15, 15)
+    brain.screen.draw_rectangle(75, 45, 15, 15)
+    brain.screen.draw_rectangle(75, 60, 15, 15)
+    brain.screen.draw_rectangle(75, 75, 15, 15)
+
+    brain.screen.draw_rectangle(90, 15, 15, 15)
+    brain.screen.draw_rectangle(90, 30, 15, 15)
+    brain.screen.draw_rectangle(90, 45, 15, 15)
+    brain.screen.draw_rectangle(90, 60, 15, 15)
+    brain.screen.draw_rectangle(90, 75, 15, 15)
+
 def callback_function(): 
     print("button pressed")
+
 def buttonLeft_pressed():
     brain.screen.clear_screen()
     brain.screen.set_cursor(4,10)
     brain.screen.print("Easy")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-
-possibleLetters = ["A", "B", "C", "D", "E", "F", "G"]
-gameBoard = [["","","","","","",""], ["","","","","","",""], ["","","","","","",""], ["","","","","","",""],
-            ["","","","","","",""], ["","","","","","",""]]
-rows=6
-cols=7
-
-def gameBoardEasy():
-    print("\n    A   B   C   D   E   F   G  ", end="")
-    for x in range(rows):
-        print("  +---+---+---+---+---+---+---+")
-        print(x, " |", end="")
-        for y in range(cols):
-            if(gameBoard [x][y] == "x"):
-                print("", gameBoard[x][y], end=" | " )
-            elif(gameBoard[x][y] == "o"):
-                print("", gameBoard[x][y], end=" | ")
-            else:
-                print("", gameBoard[x][y], end=" | ")
-        print("")
-
-brain.screen.print(gameBoardEasy())
-
+    gameBoard()
 
 def buttonRight_pressed():
     brain.screen.clear_screen()
@@ -91,13 +121,17 @@ def buttonRight_pressed():
     brain.screen.print("Medium")
     wait(2,SECONDS)
     brain.screen.clear_screen()
+    gameBoard()
+
 def buttonCheck_pressed():
     brain.screen.clear_screen()
     brain.screen.set_cursor(4,10)
     brain.screen.print("Hard")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-
+    gameBoard()
+    
+    
 brain.buttonLeft.pressed(buttonLeft_pressed)
 brain.buttonRight.pressed(buttonRight_pressed)
 brain.buttonCheck.pressed(buttonCheck_pressed)
@@ -105,32 +139,3 @@ brain.buttonCheck.pressed(buttonCheck_pressed)
 wait(5, SECONDS)
 #brain.screen.clear_screen()
 #brain.screen.draw_rectangle(8, 3, 145, 100)
-
-
-
-#possibleLetters = ["A", "B", "C", "D", "E", "F", "G"]
-#gameBoard = [["","","","","","",""], ["","","","","","",""], ["","","","","","",""], ["","","","","","",""], 
-#            ["","","","","","",""], ["","","","","","",""]]
-#rows=6
-#cols=7
-
-#def printGameBoardTest():
-
-#    brain.screen.set_font(FontType.MONO12)
- #   brain.screen.set_cursor(0,0)
-  #  print("\n     A     B     C     D     E     F     G  ", end="")
-   # for x in range(rows):
-    #    print("\n     +-----+-----+-----+-----+-----+-----+-----+")
-     #   print(x, " |", end="")
-      #  for y in range(cols):
-       #     if(gameBoard [x][y] == "x"):
-        #        print("", gameBoard[x][y], end=" |" )
-         #   elif(gameBoard[x][y] == "o"):
-          #      print("", gameBoard[x][y], end=" |")
-           # else:
-            #    print(" ", gameBoard[x][y], end=" |")
-        #print("\n     +-----+-----+-----+-----+-----+-----+-----")
-
-#printGameBoardTest()
-
-
