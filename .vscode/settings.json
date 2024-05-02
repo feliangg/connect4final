@@ -1,5 +1,5 @@
 {
-	"python.analysis.stubPath": "/Users/feliciang/Library/Application Support/Code/User/globalStorage/vexrobotics.vexcode/sdk/python\\IQ2\\IQ2_1_0_0_19\\vexiq2\\stubs",
+	"python.analysis.stubPath": "/Users/feliciang/wpilib/2023/vscode/code-portable-data/user-data/User/globalStorage/vexrobotics.vexcode/sdk/python\\IQ2\\IQ2_1_0_0_19\\vexiq2\\stubs",
 	"python.analysis.diagnosticMode": "workspace",
 	"python.analysis.typeCheckingMode": "basic"
 }
