@@ -104,6 +104,32 @@ def gameBoard():
     brain.screen.draw_rectangle(90, 60, 15, 15)
     brain.screen.draw_rectangle(90, 75, 15, 15)
 
+grid = [[0] * 7 for _ in range(6)]
+
+def oneZero(grid):
+    while True:
+        ones = []
+        zeros = []
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == 1:
+                    ones.append((i, j))
+                else:
+                    zeros.append((i, j))
+
+
+shared_value = 0 
+def robotPick():
+    global shared_value
+    shared_value = new_value
+    
+def playerPick():
+    global shared_value
+    new_value = int(input('''column chose'''))
+    shared_value = new_value
+
+
+
 def callback_function(): 
     print("button pressed")
 
@@ -131,7 +157,7 @@ def buttonCheck_pressed():
     brain.screen.clear_screen()
     gameBoard()
     
-    
+
 brain.buttonLeft.pressed(buttonLeft_pressed)
 brain.buttonRight.pressed(buttonRight_pressed)
 brain.buttonCheck.pressed(buttonCheck_pressed)
