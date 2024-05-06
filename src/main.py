@@ -104,31 +104,34 @@ def gameBoard():
     brain.screen.draw_rectangle(90, 60, 15, 15)
     brain.screen.draw_rectangle(90, 75, 15, 15)
 
-grid = [[0] * 7 for _ in range(6)]
+def update_column(grid, j, i):
+    for i in range(len(grid) - 1, -1, -1):
+        if grid[i][column_index] == 0:
+            grid[i][j] = new_value
+            break
 
-def oneZero(grid):
-    while True:
-        ones = []
-        zeros = []
-        for i in range(len(grid)):
-            for j in range(len(grid[i])):
-                if grid[i][j] == 1:
-                    ones.append((i, j))
-                else:
-                    zeros.append((i, j))
-
-
-shared_value = 0 
-def robotPick():
-    global shared_value
-    shared_value = new_value
-    
-def playerPick():
-    global shared_value
-    new_value = int(input('''column chose'''))
-    shared_value = new_value
+def threethings(value):
+    if (value == 0):
+        return ("e")
+    elif (value == 1):
+        return ("r")
+    elif (value == 2):
+        return ("y")
 
 
+
+grid = [
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0]
+]
+
+column_index = 1
+new_value = 1
+update_column(grid, column_index, new_value)
 
 def callback_function(): 
     print("button pressed")
@@ -140,6 +143,10 @@ def buttonLeft_pressed():
     wait(2,SECONDS)
     brain.screen.clear_screen()
     gameBoard()
+    for row in grid:
+        brain.screen.set_cursor(1,1)
+        brain.screen.set_font(FontType.MONO12)
+        print([threethings(cell) for cell in row])
 
 def buttonRight_pressed():
     brain.screen.clear_screen()
