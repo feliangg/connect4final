@@ -112,25 +112,24 @@ def update_column(grid, j, i):
 
 def threethings(value):
     if (value == 0):
-        return ("e")
+        return ("_")
     elif (value == 1):
-        return ("r")
+        return ("o")
     elif (value == 2):
-        return ("y")
-
+        return ("x")
 
 
 grid = [
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0]
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ]
 ]
 
-column_index = 1
-new_value = 1
+column_index = 6
+new_value = 2
 update_column(grid, column_index, new_value)
 
 def callback_function(): 
@@ -142,11 +141,12 @@ def buttonLeft_pressed():
     brain.screen.print("Easy")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-    gameBoard()
-    for row in grid:
-        brain.screen.set_cursor(1,1)
-        brain.screen.set_font(FontType.MONO12)
-        print([threethings(cell) for cell in row])
+
+    for i in range(6):
+        brain.screen.set_font(FontType.MONO15)
+        for j in range(7):
+            brain.screen.set_cursor(i+2,j+5)
+            brain.screen.print(threethings(grid[i][j]))
 
 def buttonRight_pressed():
     brain.screen.clear_screen()
