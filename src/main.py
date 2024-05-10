@@ -104,11 +104,21 @@ def gameBoard():
     brain.screen.draw_rectangle(90, 60, 15, 15)
     brain.screen.draw_rectangle(90, 75, 15, 15)
 
+
 def update_column(grid, j, i):
     for i in range(len(grid) - 1, -1, -1):
-        if grid[i][column_index] == 0:
+        if grid[i][j] == 0:
             grid[i][j] = new_value
             break
+
+def controllercontrol():
+    global column_index
+    if Controller.axisC.position(10):
+        return 1
+    elif Controller.axisC.position(-10):
+        return -1
+    return 0
+
 
 def threethings(value):
     if (value == 0):
@@ -117,6 +127,34 @@ def threethings(value):
         return ("o")
     elif (value == 2):
         return ("x")
+    
+
+def isSpaceAvailable(intendedCoordinate):
+  if(grid[intendedCoordinate[0]][intendedCoordinate[1]] == "o"):
+    return False
+  elif(grid[intendedCoordinate[0]][intendedCoordinate[1]] == "x"):
+    return False
+  else:
+    return True
+
+
+def pieceChecker(intendedCoordinate):
+  ### Calculate space below
+  spaceBelow = [None] * 2
+  spaceBelow[0] = intendedCoordinate[0] + 1
+  spaceBelow[1] = intendedCoordinate[1]
+  ### Is the coordinate at ground level
+  if(spaceBelow[0] == 6):
+    return True
+  ### Check if there's a token below
+  if(isSpaceAvailable(spaceBelow) == False):
+    return True
+  return False
+
+   
+#def robotPickEasy():
+   
+
 
 
 grid = [
@@ -128,9 +166,7 @@ grid = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ]
 ]
 
-column_index = 6
 new_value = 2
-update_column(grid, column_index, new_value)
 
 def callback_function(): 
     print("button pressed")
@@ -141,7 +177,8 @@ def buttonLeft_pressed():
     brain.screen.print("Easy")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-
+    column_index = controllercontrol()
+    update_column(grid, column_index, new_value)
     for i in range(6):
         brain.screen.set_font(FontType.MONO15)
         for j in range(7):
