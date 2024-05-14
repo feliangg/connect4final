@@ -1,7 +1,6 @@
 #region VEXcode Generated Robot Configuration
 #from gc import callbacks
 import random
-import math
 from vex import *
 
     # Brain should be defined by default
@@ -9,6 +8,7 @@ brain=Brain()
 
     # Robot configuration code
 brain_inertial = Inertial()
+controller = Controller()
 
 
 
@@ -105,19 +105,24 @@ def gameBoard():
     brain.screen.draw_rectangle(90, 75, 15, 15)
 
 
-def update_column(grid, j, i):
-    for i in range(len(grid) - 1, -1, -1):
-        if grid[i][j] == 0:
-            grid[i][j] = new_value
+def update_column(grid, column_selected=3, piecetype=1):
+    for i in range(5, -1, -1):
+        if grid[i][column_selected] == 0:
+            grid[i][column_selected] = piecetype
             break
 
 def controllercontrol():
-    global column_index
-    if Controller.axisC.position(10):
-        return 1
-    elif Controller.axisC.position(-10):
-        return -1
-    return 0
+    global selected_column
+    if controller.axisC.position() > 5:
+        selected_column = selected_column =+ 1
+        brain.screen.clear_row(1)
+        brain.screen.set_cursor(1,selected_column)
+        brain.screen.print("V")
+    elif controller.axisC.position() < -5:
+        selected_column = selected_column =- 1
+        brain.screen.clear_row(1)
+        brain.screen.set_cursor(1,selected_column)
+        brain.screen.print("V")
 
 
 def threethings(value):
@@ -128,7 +133,6 @@ def threethings(value):
     elif (value == 2):
         return ("x")
     
-
 def isSpaceAvailable(intendedCoordinate):
   if(grid[intendedCoordinate[0]][intendedCoordinate[1]] == "o"):
     return False
@@ -155,7 +159,7 @@ def pieceChecker(intendedCoordinate):
 #def robotPickEasy():
    
 
-
+selected_column = 1
 
 grid = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
@@ -177,13 +181,15 @@ def buttonLeft_pressed():
     brain.screen.print("Easy")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-    column_index = controllercontrol()
-    update_column(grid, column_index, new_value)
     for i in range(6):
         brain.screen.set_font(FontType.MONO15)
         for j in range(7):
             brain.screen.set_cursor(i+2,j+5)
-            brain.screen.print(threethings(grid[i][j]))
+            brain.screen.print((grid[i][j]))
+    brain.screen.set_cursor(1,selected_column)
+    brain.screen.print("V")
+    column_index = controllercontrol()
+    update_column(grid, column_selected=column_index, piecetype=new_value)
 
 def buttonRight_pressed():
     brain.screen.clear_screen()
@@ -201,11 +207,13 @@ def buttonCheck_pressed():
     brain.screen.clear_screen()
     gameBoard()
     
-
 brain.buttonLeft.pressed(buttonLeft_pressed)
 brain.buttonRight.pressed(buttonRight_pressed)
 brain.buttonCheck.pressed(buttonCheck_pressed)
-
 wait(5, SECONDS)
+
+while True:
+    controllercontrol()
+
 #brain.screen.clear_screen()
 #brain.screen.draw_rectangle(8, 3, 145, 100)
