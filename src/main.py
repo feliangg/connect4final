@@ -107,9 +107,70 @@ def gameBoard():
 
 def update_column(grid, column_selected=3, piecetype=1):
     for i in range(5, -1, -1):
-        if grid[i][column_selected] == 0:
+        if grid[i][column_selected] == column:
             grid[i][column_selected] = piecetype
             break
+        
+column = 0
+
+def columnchoosing():
+    global column, tempcolumn, column_selected, vexcode_brain_precision, vexcode_console_precision
+    tempcolumn = 1
+    brain.screen.set_cursor(2, 3)#change later just placeholder
+    while not controller.buttonRDown.pressing():
+        if controller.buttonLDown.pressing():
+            tempcolumn = tempcolumn + 1
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        elif controller.buttonLUp.pressing():
+            brain.screen.set_cursor(2, 3)
+            tempcolumn = tempcolumn + 2
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        elif controller.buttonEUp.pressing():
+            brain.screen.set_cursor(2, 3)
+            tempcolumn = tempcolumn + 3
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        elif controller.buttonEDown.pressing():
+            brain.screen.set_cursor(2, 3)
+            tempcolumn = tempcolumn + 4
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        elif controller.buttonFDown.pressing():
+            brain.screen.set_cursor(2, 3)
+            tempcolumn = tempcolumn + 5
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        elif controller.buttonFUp.pressing():
+            brain.screen.set_cursor(2, 3)
+            tempcolumn = tempcolumn + 6
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        elif controller.buttonRUp.pressing():
+            brain.screen.set_cursor(2, 3)
+            tempcolumn = tempcolumn + 7
+            brain.screen.set_cursor(1, tempcolumn)
+            brain.screen.set_font(FontType.MONO.12)
+            brain.screen.print("V")
+            #break
+        else:
+            pass
+    if controller.buttonRDown.pressing():
+            column_selected = tempcolumn
+    wait(20, MSEC)
 
 def controllercontrol():
     global selected_column
@@ -156,8 +217,9 @@ def pieceChecker(intendedCoordinate):
   return False
 
    
-#def robotPickEasy():
-   
+def robotPickEasy():
+    roboPick = random.randint(0,6)
+
 
 selected_column = 1
 
@@ -176,6 +238,7 @@ def callback_function():
     print("button pressed")
 
 def buttonLeft_pressed():
+    global selected_column
     brain.screen.clear_screen()
     brain.screen.set_cursor(4,10)
     brain.screen.print("Easy")
@@ -188,8 +251,8 @@ def buttonLeft_pressed():
             brain.screen.print((grid[i][j]))
     brain.screen.set_cursor(1,selected_column)
     brain.screen.print("V")
-    column_index = controllercontrol()
-    update_column(grid, column_selected=column_index, piecetype=new_value)
+    columnchoosing()
+    update_column(grid, column_selected=3, piecetype=1)
 
 def buttonRight_pressed():
     brain.screen.clear_screen()
