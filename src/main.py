@@ -38,10 +38,12 @@ setRandomSeedUsingAccel()
 from vex import *
 import random
     # Begin project code
-
-selected_column = 1
+row_index = 5
+column_index = 6
+column_selected = 0
 column = 0
-new_value = 2
+piecetype = 0
+roboPick = 6
 grid = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
@@ -102,63 +104,68 @@ def gameBoard():
     brain.screen.draw_rectangle(90, 60, 15, 15)
     brain.screen.draw_rectangle(90, 75, 15, 15)
 
-def update_grid(grid, column_selected=3, piecetype=1):
+def update_grid():
     for i in range(5, -1, -1):
-        if grid[i][column_selected] == column:
-            grid[i][column_selected] = piecetype
-            break
-        
+        print(i)
+        print("  ")
+        print(grid[1][column_selected])
+        if grid[i][column_selected] == 0: #index out of range
+                grid[i][column_selected] = piecetype
+                break
+
+#i is row, j is column 
+
 def columnchoosing():
-    #global column, column_selected, vexcode_brain_precision, vexcode_console_precision
-    tempcolumn = 1
+    global column, column_selected, piecetype
+    tempcolumn = 0
     while not controller.buttonRDown.pressing():
         if controller.buttonLDown.pressing():
             brain.screen.clear_row(1)
             tempcolumn =  1
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
+            
         elif controller.buttonLUp.pressing():
             brain.screen.clear_row(1)
             tempcolumn = 2
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
+            
         elif controller.buttonEUp.pressing():
             brain.screen.clear_row(1)
             tempcolumn = 3
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
+            
         elif controller.buttonEDown.pressing():
             brain.screen.clear_row(1)
             tempcolumn = 4
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
+
         elif controller.buttonFDown.pressing():
             brain.screen.clear_row(1)
             tempcolumn = 5
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
+
         elif controller.buttonFUp.pressing():
             brain.screen.clear_row(1)
             tempcolumn = 6
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
+
         elif controller.buttonRUp.pressing():
             brain.screen.clear_row(1)
             tempcolumn = 7
             brain.screen.set_cursor(1, tempcolumn)
             brain.screen.print("V")
-            #break
         else:
             pass
         wait(100, MSEC)
     
-    column_selected = tempcolumn
+    column_selected = tempcolumn - 1
+    piecetype = 1   
     wait(20, MSEC)
 
 def controllercontrol():
@@ -181,16 +188,41 @@ def threethings(value):
         return ("o")
     elif (value == 2):
         return ("x")
+
+def checkWinner(grid, chip):    
+    for j in range(6):
+        for i in range(- 3):
+            if grid[i][j] == chip and grid[i+1][j] == chip and grid[i+2][j] == chip and grid[i+3][j] == chip:
+                print("\nGame over", chip, "winner:)")
+                return True
+            
+    for i in range(6):
+        for j in range(7 - 3):
+            if grid[i][j] == chip and grid[i][j+1] == chip and grid[i][j+2] == chip and grid[i][j+3] == chip:
+                print("\nGame over", chip, "winner:)")
+                return True
     
-def isSpaceAvailable(intendedCoordinate):
-  if(grid[intendedCoordinate[0]][intendedCoordinate[1]] == "o"):
+    for i in range(6 - 3):
+        for j in range(3, 7):
+            if grid[i][j] == chip and grid[i+1][j-1] == chip and grid[i+2][j-2] == chip and grid[i+3][j-3] == chip:
+                print("\nGame over", chip, "winner:)")
+                return True
+    for i in range(6 - 3):
+        for j in range(7 - 3):
+            if grid[i][j] == chip and grid[i+1][j+1] == chip and grid[i+2][j+2] == chip and grid[i+3][j+3] == chip:
+                print("\nGame over", chip, "winner)")
+                return True
     return False
-  elif(grid[intendedCoordinate[0]][intendedCoordinate[1]] == "x"):
+
+def isSpaceAvailable(intendedCoordinate):
+  if(grid[intendedCoordinate[0]][intendedCoordinate[1]] == 1):
+    return False
+  elif(grid[intendedCoordinate[0]][intendedCoordinate[1]] == 2):
     return False
   else:
     return True
 
-def pieceChecker(intendedCoordinate):
+def pieceChecker(intendedCoordinate):                                   
   ### Calculate space below
   spaceBelow = [None] * 2
   spaceBelow[0] = intendedCoordinate[0] + 1
@@ -204,7 +236,9 @@ def pieceChecker(intendedCoordinate):
   return False
 
 def robotPickEasy():
-    roboPick = random.randint(0,6)
+    global piecetype, roboPick, column_selected
+    column_selected = roboPick
+    piecetype = 2
 
 def buttonLeft_pressed():
     #global selected_column
@@ -213,6 +247,7 @@ def buttonLeft_pressed():
     brain.screen.print("Easy")
     wait(2,SECONDS)
     brain.screen.clear_screen()
+    playEasy()
 
 def buttonRight_pressed():
     brain.screen.clear_screen()
@@ -235,43 +270,53 @@ def printScreen():
     for i in range(6):
         brain.screen.set_font(FontType.MONO15)
         for j in range(7):
-            brain.screen.set_cursor(i+2,j+5)
+            brain.screen.set_cursor(i+2,j+1)
             brain.screen.print((grid[i][j]))
-
-def levelchooser():
-    brain.screen.set_cursor(3,5)
-    brain.screen.print("connect 4")
-    wait(1, SECONDS)
-    brain.screen.clear_screen()
-    brain.screen.set_cursor(3, 2)
-    brain.screen.set_font(FontType.MONO15)
-    brain.screen.print("Select difficulty")
-    wait(1, SECONDS)
-    brain.screen.clear_screen()
-    brain.screen.set_cursor(2, 3)
-    brain.screen.print("Left = Easy")
-    brain.screen.set_cursor(4, 3)
-    brain.screen.print("Right = Medium")
-    brain.screen.set_cursor(6,3)
-    brain.screen.print("Check = Hard")
 
 def playEasy():
     while True:
         printScreen()
         columnchoosing()
-        update_grid(grid, column_selected=3, piecetype=1)
+        print("column selected")
+        update_grid()
+        print("grid updated")
         printScreen()
+        wait(2,SECONDS)
         robotPickEasy()
-        update_grid(grid, column_selected=3, piecetype=1)
+        update_grid()
         printScreen()
+        wait(2,SECONDS)
+        if checkWinner == True:
+            break
+    brain.screen.clear_screen()
+    brain.screen.print("poop")
+
+brain.screen.set_cursor(3,5)
+brain.screen.print("connect 4")
+wait(1, SECONDS)
+brain.screen.clear_screen()
+brain.screen.set_cursor(3, 2)
+brain.screen.set_font(FontType.MONO15)
+brain.screen.print("Select difficulty")
+wait(1, SECONDS)
+brain.screen.clear_screen()
+brain.screen.set_cursor(2, 3)
+brain.screen.print("Left = Easy")
+brain.screen.set_cursor(4, 3)
+brain.screen.print("Right = Medium")
+brain.screen.set_cursor(6,3)
+brain.screen.print("Check = Hard")
 
 brain.buttonLeft.pressed(buttonLeft_pressed)
-playEasy()
+brain.buttonRight.pressed(buttonRight_pressed)
+brain.buttonCheck.pressed(buttonCheck_pressed)
+
+
+'''brain.buttonLeft.pressed(buttonLeft_pressed)
 
 brain.buttonRight.pressed(buttonRight_pressed)
 
-brain.buttonCheck.pressed(buttonCheck_pressed)
-wait(5, SECONDS)
+brain.buttonCheck.pressed(buttonCheck_pressed)'''
 
 #brain.screen.clear_screen()
 #brain.screen.draw_rectangle(8, 3, 145, 100)
