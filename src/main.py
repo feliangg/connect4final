@@ -43,7 +43,7 @@ column_index = 6
 column_selected = 0
 column = 0
 piecetype = 0
-roboPick = 6
+roboPick = 2
 grid = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ],
@@ -168,53 +168,58 @@ def columnchoosing():
     piecetype = 1   
     wait(20, MSEC)
 
-def controllercontrol():
-    global selected_column
-    if controller.axisC.position() > 5:
-        selected_column = selected_column =+ 1
-        brain.screen.clear_row(1)
-        brain.screen.set_cursor(1,selected_column)
-        brain.screen.print("V")
-    elif controller.axisC.position() < -5:
-        selected_column = selected_column =- 1
-        brain.screen.clear_row(1)
-        brain.screen.set_cursor(1,selected_column)
-        brain.screen.print("V")
-
-def threethings(value):
-    if (value == 0):
-        return ("_")
-    elif (value == 1):
-        return ("o")
-    elif (value == 2):
-        return ("x")
-
 # not supposed to check so many index, cuz that would cause the index to become out of range
 
-def checkWinner(grid, piecetype):    
+def checkPlayerWinner(grid):    
     #horizontal
-    for j in range(6):
-        for i in range(6 - 3):
-            if grid[i][j] == piecetype and grid[i+1][j] == piecetype and grid[i+2][j] == piecetype and grid[i+3][j] == piecetype:
-                print("\nGame over", piecetype, "winner: player)")
+    for j in range(5):
+        for i in range(0, 3):
+            if grid[i][j] == 1 and grid[i+1][j] == 1 and grid[i+2][j] == 1 and grid[i+3][j] == 1:
+                print("\nGame over", 1, "winner: player)")
                 return True
     #vertical
-    for i in range(5):
-        for j in range(6 - 3):
-            if grid[i][j] == piecetype and grid[i][j+1] == piecetype and grid[i][j+2] == piecetype and grid[i][j+3] == piecetype:
-                print("\nGame over", piecetype, "winner:)")
+    for i in range(6):
+        for j in range(0, 2):
+            if grid[i][j] == 1 and grid[i][j+1] == 1 and grid[i][j+2] == 1 and grid[i][j+3] == 1:
+                print("\nGame over", 1, "winner:)")
                 return True
     #positive diagonal
-    for i in range(5 - 3):
-        for j in range(3, 7):
-            if grid[i][j] == piecetype and grid[i+1][j-1] == piecetype and grid[i+2][j-2] == piecetype and grid[i+3][j-3] == piecetype:
-                print("\nGame over", piecetype, "winner:)")
+    for i in range(3):
+        for j in range(3, 5):
+            if grid[i][j] == 1 and grid[i+1][j-1] == 1 and grid[i+2][j-2] == 1 and grid[i+3][j-3] == 1:
+                print("\nGame over", 1, "winner:)")
                 return True
     #negativ diagonal
-    for i in range(5 - 3):
-        for j in range(7 - 3):
-            if grid[i][j] == piecetype and grid[i+1][j+1] == piecetype and grid[i+2][j+2] == piecetype and grid[i+3][j+3] == piecetype:
-                print("\nGame over", piecetype, "winner)")
+    for i in range(-3):
+        for j in range(0, 2):
+            if grid[i][j] == 1 and grid[i+1][j+1] == 1 and grid[i+2][j+2] == 1 and grid[i+3][j+3] == 1:
+                print("\nGame over", 1, "winner)")
+                return True
+    return False
+def checkRobotWinner(grid):    
+    #horizontal
+    for j in range(5):
+        for i in range(0, 3):
+            if grid[i][j] == 2 and grid[i+1][j] == 2 and grid[i+2][j] == 2 and grid[i+3][j] == 2:
+                print("\nGame over", 2, "winner: player)")
+                return True
+    #vertical
+    for i in range(6):
+        for j in range(0, 2):
+            if grid[i][j] == 2 and grid[i][j+1] == 2 and grid[i][j+2] == 2 and grid[i][j+3] == 2:
+                print("\nGame over", 2, "winner:)")
+                return True
+    #positive diagonal
+    for i in range(3):
+        for j in range(3, 5):
+            if grid[i][j] == 2 and grid[i+1][j-1] == 2 and grid[i+2][j-2] == 2 and grid[i+3][j-3] == 2:
+                print("\nGame over", 2, "winner:)")
+                return True
+    #negativ diagonal
+    for i in range(-3):
+        for j in range(0, 2):
+            if grid[i][j] == 2 and grid[i+1][j+1] == 2 and grid[i+2][j+2] == 2 and grid[i+3][j+3] == 2:
+                print("\nGame over", 2, "winner)")
                 return True
     return False
 
@@ -237,6 +242,7 @@ def pieceChecker(intendedCoordinate):
   ### Check if there's a token below
   if(isSpaceAvailable(spaceBelow) == False):
     return True
+  
   return False
 
 def robotPickEasy():
@@ -254,7 +260,6 @@ def robotPickHard():
     global piecetype, roboPick, column_selected
     #if console sees 3 ones in diagonal, veritcal, or horizontal, block it (smth like that, make it a function) 
     # also need it to be able to find a way to block it and avoid placing pieces???? wtf aint no way. 
-    
     column_selected = roboPick
     piecetype = 2
 
@@ -305,11 +310,14 @@ def playEasy():
         update_grid()
         printScreen()
         wait(.5,SECONDS)
-        if checkWinner(grid, piecetype) == True:
+        if checkPlayerWinner(grid) == True:
             break
-    brain.screen.clear_screen()
-    brain.screen.print("poop")
-
+        brain.screen.clear_screen()
+        brain.screen.print("YOU WON")
+        if checkRobotWinner(grid) == True:
+            break
+        brain.screen.clear_screen()
+        brain.screen.print("robot won tsk")
 
 def playMedium():
     while True:
@@ -324,10 +332,14 @@ def playMedium():
         update_grid()
         printScreen()
         wait(.5,SECONDS)
-        if checkWinner(grid, piecetype) == True:
+        if checkPlayerWinner(grid) == True:
             break
-    brain.screen.clear_screen()
-    brain.screen.print("poop 2")
+        brain.screen.clear_screen()
+        brain.screen.print("player winds")
+        if checkRobotWinner(grid) == True:
+            break
+        brain.screen.clear_screen()
+        brain.screen.print("robot wins?!")
 
 def playHardLmao():
     while True:
@@ -367,12 +379,6 @@ brain.buttonLeft.pressed(buttonLeft_pressed)
 brain.buttonRight.pressed(buttonRight_pressed)
 brain.buttonCheck.pressed(buttonCheck_pressed)
 
-
-'''brain.buttonLeft.pressed(buttonLeft_pressed)
-
-brain.buttonRight.pressed(buttonRight_pressed)
-
-brain.buttonCheck.pressed(buttonCheck_pressed)'''
 
 #brain.screen.clear_screen()
 #brain.screen.draw_rectangle(8, 3, 145, 100)
