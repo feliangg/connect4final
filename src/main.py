@@ -189,28 +189,32 @@ def threethings(value):
     elif (value == 2):
         return ("x")
 
-def checkWinner(grid, chip):    
+# not supposed to check so many index, cuz that would cause the index to become out of range
+
+def checkWinner(grid, piecetype):    
+    #horizontal
     for j in range(6):
-        for i in range(- 3):
-            if grid[i][j] == chip and grid[i+1][j] == chip and grid[i+2][j] == chip and grid[i+3][j] == chip:
-                print("\nGame over", chip, "winner:)")
+        for i in range(6 - 3):
+            if grid[i][j] == piecetype and grid[i+1][j] == piecetype and grid[i+2][j] == piecetype and grid[i+3][j] == piecetype:
+                print("\nGame over", piecetype, "winner: player)")
                 return True
-            
-    for i in range(6):
-        for j in range(7 - 3):
-            if grid[i][j] == chip and grid[i][j+1] == chip and grid[i][j+2] == chip and grid[i][j+3] == chip:
-                print("\nGame over", chip, "winner:)")
+    #vertical
+    for i in range(5):
+        for j in range(6 - 3):
+            if grid[i][j] == piecetype and grid[i][j+1] == piecetype and grid[i][j+2] == piecetype and grid[i][j+3] == piecetype:
+                print("\nGame over", piecetype, "winner:)")
                 return True
-    
-    for i in range(6 - 3):
+    #positive diagonal
+    for i in range(5 - 3):
         for j in range(3, 7):
-            if grid[i][j] == chip and grid[i+1][j-1] == chip and grid[i+2][j-2] == chip and grid[i+3][j-3] == chip:
-                print("\nGame over", chip, "winner:)")
+            if grid[i][j] == piecetype and grid[i+1][j-1] == piecetype and grid[i+2][j-2] == piecetype and grid[i+3][j-3] == piecetype:
+                print("\nGame over", piecetype, "winner:)")
                 return True
-    for i in range(6 - 3):
+    #negativ diagonal
+    for i in range(5 - 3):
         for j in range(7 - 3):
-            if grid[i][j] == chip and grid[i+1][j+1] == chip and grid[i+2][j+2] == chip and grid[i+3][j+3] == chip:
-                print("\nGame over", chip, "winner)")
+            if grid[i][j] == piecetype and grid[i+1][j+1] == piecetype and grid[i+2][j+2] == piecetype and grid[i+3][j+3] == piecetype:
+                print("\nGame over", piecetype, "winner)")
                 return True
     return False
 
@@ -240,6 +244,21 @@ def robotPickEasy():
     column_selected = roboPick
     piecetype = 2
 
+def robotPickMedium():
+    global piecetype, roboPick, column_selected
+    roboPick = random.randint(0, 6)
+    column_selected = roboPick
+    piecetype = 2
+
+def robotPickHard():
+    global piecetype, roboPick, column_selected
+    #if console sees 3 ones in diagonal, veritcal, or horizontal, block it (smth like that, make it a function) 
+    # also need it to be able to find a way to block it and avoid placing pieces???? wtf aint no way. 
+    
+    column_selected = roboPick
+    piecetype = 2
+
+
 def buttonLeft_pressed():
     #global selected_column
     brain.screen.clear_screen()
@@ -255,7 +274,7 @@ def buttonRight_pressed():
     brain.screen.print("Medium")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-    gameBoard()
+    playMedium()
 
 def buttonCheck_pressed():
     brain.screen.clear_screen()
@@ -263,7 +282,7 @@ def buttonCheck_pressed():
     brain.screen.print("Hard")
     wait(2,SECONDS)
     brain.screen.clear_screen()
-    gameBoard()
+    playHardLmao()
 
 def printScreen():
     brain.screen.clear_screen()
@@ -281,15 +300,52 @@ def playEasy():
         update_grid()
         print("grid updated")
         printScreen()
-        wait(2,SECONDS)
+        wait(1,SECONDS)
         robotPickEasy()
         update_grid()
         printScreen()
-        wait(2,SECONDS)
-        if checkWinner == True:
+        wait(.5,SECONDS)
+        if checkWinner(grid, piecetype) == True:
             break
     brain.screen.clear_screen()
     brain.screen.print("poop")
+
+
+def playMedium():
+    while True:
+        printScreen()
+        columnchoosing()
+        print("column selected")
+        update_grid()
+        print("grid updated")
+        printScreen()
+        wait(1,SECONDS)
+        robotPickMedium()
+        update_grid()
+        printScreen()
+        wait(.5,SECONDS)
+        if checkWinner(grid, piecetype) == True:
+            break
+    brain.screen.clear_screen()
+    brain.screen.print("poop 2")
+
+def playHardLmao():
+    while True:
+        printScreen()
+        columnchoosing()
+        print("column selected")
+        update_grid()
+        print("grid updated")
+        printScreen()
+        wait(1,SECONDS)
+        robotPickHard()
+        update_grid()
+        printScreen()
+        wait(.5,SECONDS)
+        if checkWinner(grid, piecetype) == True:
+            break
+    brain.screen.clear_screen()
+    brain.screen.print("poop 3")
 
 brain.screen.set_cursor(3,5)
 brain.screen.print("connect 4")
