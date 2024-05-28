@@ -113,8 +113,6 @@ def update_grid():
                 grid[i][column_selected] = piecetype
                 break
 
-#i is row, j is column 
-
 def columnchoosing():
     global column, column_selected, piecetype
     tempcolumn = 0
@@ -167,8 +165,6 @@ def columnchoosing():
     column_selected = tempcolumn - 1
     piecetype = 1   
     wait(20, MSEC)
-
-# not supposed to check so many index, cuz that would cause the index to become out of range
 
 def checkPlayerWinner(grid):    
     #horizontal
@@ -258,11 +254,20 @@ def robotPickMedium():
 
 def robotPickHard():
     global piecetype, roboPick, column_selected
-    #if console sees 3 ones in diagonal, veritcal, or horizontal, block it (smth like that, make it a function) 
-    # also need it to be able to find a way to block it and avoid placing pieces???? wtf aint no way. 
-    column_selected = roboPick
-    piecetype = 2
-
+    #place piece eithr above or next to player placed piece 
+    randplace = random.randint(0, 2)
+    if randplace == 0 and column_selected != 6:
+        column_selected = column_selected + 1 
+        piecetype = 2 
+    elif randplace == 1:
+        column_selected = column_selected + 1
+        piecetype = 2
+    elif randplace == 2:
+        column_selected  = column_selected
+        piecetype = 2
+    elif column_selected == 6:
+        column_selected = 5
+        piecetype = 2
 
 def buttonLeft_pressed():
     #global selected_column
@@ -306,18 +311,20 @@ def playEasy():
         print("grid updated")
         printScreen()
         wait(1,SECONDS)
+        if checkPlayerWinner(grid) == True:
+            brain.screen.set_cursor(5, 10)
+            brain.screen.print("YOU WON")
+            wait(5,SECONDS)
+            break
         robotPickEasy()
         update_grid()
         printScreen()
         wait(.5,SECONDS)
-        if checkPlayerWinner(grid) == True:
-            break
-        brain.screen.clear_screen()
-        brain.screen.print("YOU WON")
         if checkRobotWinner(grid) == True:
+            brain.screen.set_cursor(5, 10)
+            brain.screen.print("ur bad")
+            wait(5,SECONDS)
             break
-        brain.screen.clear_screen()
-        brain.screen.print("robot won tsk")
 
 def playMedium():
     while True:
@@ -328,18 +335,20 @@ def playMedium():
         print("grid updated")
         printScreen()
         wait(1,SECONDS)
+        if checkPlayerWinner(grid) == True:
+            brain.screen.set_cursor(5, 10)
+            brain.screen.print("you won??")
+            wait(5,SECONDS)
+            break
         robotPickMedium()
         update_grid()
         printScreen()
         wait(.5,SECONDS)
-        if checkPlayerWinner(grid) == True:
-            break
-        brain.screen.clear_screen()
-        brain.screen.print("player winds")
         if checkRobotWinner(grid) == True:
+            brain.screen.set_cursor(5, 10)
+            brain.screen.print("robot won")
+            wait(5,SECONDS)
             break
-        brain.screen.clear_screen()
-        brain.screen.print("robot wins?!")
 
 def playHardLmao():
     while True:
@@ -350,14 +359,21 @@ def playHardLmao():
         print("grid updated")
         printScreen()
         wait(1,SECONDS)
+        if checkPlayerWinner(grid) == True:
+            brain.screen.set_cursor(5, 10)
+            brain.screen.print("u won")
+            wait(5,SECONDS)
+            break
         robotPickHard()
         update_grid()
         printScreen()
         wait(.5,SECONDS)
-        if checkWinner(grid, piecetype) == True:
+        if checkRobotWinner(grid) == True:
+            brain.screen.set_cursor(5, 10)
+            brain.screen.print("u lost")
+            wait(5,SECONDS)
             break
-    brain.screen.clear_screen()
-    brain.screen.print("poop 3")
+
 
 brain.screen.set_cursor(3,5)
 brain.screen.print("connect 4")
